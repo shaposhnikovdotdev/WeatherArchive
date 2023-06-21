@@ -1,0 +1,71 @@
+﻿@using Application.Common.DTOs
+@using WeatherArchiveMvc.Models
+@model IndexViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<form>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="date" asp-for="Date"></input>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" value="set" />
+        </div>
+    </div>
+</form>
+
+
+<a asp-action="Index" asp-route-date="@Model.Date" class="datepicker">
+</a>
+
+<h1>Список пользователей</h1>
+<table class="table">
+    <tr><th>Дата</th><th>Температура</th>
+        <th>Отн. влажность воздуха %</th>
+        <th>Точка росы</th>
+        <th>Атм. давление</th>
+        <th>Направление ветра</th>
+        <th>Скорость ветра м/c</th>
+        <th>Облачность %</th>
+        <th>Нижняя граница облачности</th>
+        <th>Горизонтальная видимость</th>
+        <th>Погодные явления</th>
+    </tr>
+    @foreach (WeatherDto u in Model.Weathers)
+    {
+        <tr>
+            <td>@u.DateTime.ToString()</td>
+            <td>@u.Temperature</td><td>@u.AirHumidity</td>
+            <td>@u.DewPoint</td>
+            <td>@u.AirPressure</td>
+            <td>@u.WindDirection</td>
+            <td>@u.WindSpeed</td>
+            <td>@u.Cloudiness</td>
+            <td>@u.minCloudiness</td>
+            <td>@u.HorizontalVisibility</td>
+            <td>@u.Event</td>
+        </tr>
+    }
+</table>
+
+@if (Model.PageViewModel.HasPreviousPage)
+{
+    <a asp-action="Index"
+   asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+   class="btn btn-outline-dark">
+        <i class="glyphicon glyphicon-chevron-left"></i>
+        Назад
+    </a>
+}
+@if (Model.PageViewModel.HasNextPage)
+{
+    <a asp-action="Index" asp-route-page="@(Model.PageViewModel.PageNumber + 1)" class="btn btn-outline-dark">
+        Вперед
+        <i class="glyphicon glyphicon-chevron-right"></i>
+    </a>
+}
